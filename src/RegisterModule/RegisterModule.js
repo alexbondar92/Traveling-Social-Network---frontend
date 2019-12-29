@@ -1,5 +1,7 @@
 import React from 'react';
+import axios from 'axios';
 
+const baseUrl = 'http://localhost:5000'
 
 class RegisterModule extends React.Component {
 	constructor(props) {
@@ -23,10 +25,28 @@ class RegisterModule extends React.Component {
         this.setState({ [name]: value });
     }
 
-  	handleSubmit(event) {
+  	async handleSubmit(event) {
     	event.preventDefault();
 
     	this.setState({ submitted: true });
+    	const { first_name, last_name, email, username, password, submitted } = this.state;
+
+    	await axios.post(`${baseUrl}/register`, { first_name, last_name, email, username, password })
+      		.then(res => {
+        		console.log(res);
+        		console.log(res.data);
+        		if (res.data.register === "ACK") {
+      				console.log('register success');
+      			} else {
+      				console.log('wrong credentials');
+      			}
+      		})
+      		.catch(function (error) {
+    			console.log(error);
+    		})
+    		.finally(function () {
+    			// allways excuted
+    		});
 
     	// TODO: validation...
     	// TODO: send async http request to backend 

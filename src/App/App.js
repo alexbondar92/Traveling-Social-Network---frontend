@@ -8,6 +8,7 @@ import './App.css';
 import { HomeModule } from '../HomeModule';
 import { LoginModule } from '../LoginModule';
 import { RegisterModule } from '../RegisterModule';
+import { NotFound } from '../NotFound';
 import {history} from '../_helpers';
 import {PrivateRoute} from '../_helpers';
 
@@ -46,9 +47,12 @@ class App extends React.Component {
     return (
       <Router history={history}>
         <div>
-          <Route exact path="/" component={App_old} />
-          <Route exact path="/login" component={LoginModule} />
-          <Route exact path="/register" component={RegisterModule} />
+          <Switch>
+            <Route exact path="/" component={App_old} />
+            <Route exact path="/login" component={LoginModule} />
+            <Route exact path="/register" component={RegisterModule} />
+            <Route component={NotFound} />
+          </Switch>
         </div>
       </Router>
     );

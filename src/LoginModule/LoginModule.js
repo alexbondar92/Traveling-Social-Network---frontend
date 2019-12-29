@@ -1,5 +1,8 @@
 import React from 'react';
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import axios from 'axios';
 
+const baseUrl = 'http://localhost:5000'
 
 class LoginModule extends React.Component {
 	constructor(props) {
@@ -27,12 +30,28 @@ class LoginModule extends React.Component {
    //  	return this.state.email.length > 0 && this.state.password.length > 0;
   	// }
 
-  	handleSubmit(event) {
+  	async handleSubmit(event) {
     	event.preventDefault();
 
     	this.setState({ submitted: true });
+    	const { username, password, submitted } = this.state;
 
-    	// TODO: send async http request to backend
+      	await axios.post(`${baseUrl}/login`, { username, password })
+      		.then(res => {
+        		console.log(res);
+        		console.log(res.data);
+        		if (res.data.login === "ACK") {
+      				console.log('login success');
+      			} else {
+      				console.log('wrong credentials');
+      			}
+      		})
+      		.catch(function (error) {
+    			console.log(error);
+    		})
+    		.finally(function () {
+    			// allways excuted
+    		});
   	}
 
 	render () {
@@ -57,7 +76,7 @@ class LoginModule extends React.Component {
                         }
                     </div>
                     <div className="form-group">
-                        <button className="btn btn-primary">Login</button>
+                        <Button block className="btn btn-primary" type="submit">Login</Button>
                         {loggingIn &&
                             <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                         }
